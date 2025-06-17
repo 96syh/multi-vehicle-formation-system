@@ -228,7 +228,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- 📧 **Email**: your.email@example.com
+- 📧 **Email**: mrsong96sy@outlook.com
 - 💬 **Discussions**: [GitHub Discussions](https://github.com/yourusername/multi-vehicle-formation-system/discussions)
 - 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/multi-vehicle-formation-system/issues)
 - 📖 **Wiki**: [Project Wiki](https://github.com/yourusername/multi-vehicle-formation-system/wiki)
