@@ -1,0 +1,203 @@
+# 多车编队控制参数配置文件
+# Multi-Vehicle Formation Control Parameters
+
+# 编队控制算法选择
+formation_control:
+  algorithm_type: "potential_field"  # 可选: potential_field, consensus, hybrid
+  
+  # 人工势场算法参数
+  potential_field:
+    k_att: 1.0                      # 目标吸引力增益
+    k_rep: 2.0                      # 邻车排斥力增益
+    k_form: 1.5                     # 编队约束力增益
+    k_obstacle: 3.0                 # 障碍物排斥力增益
+    
+    influence_radius: 3.0           # 势场影响半径 (m)
+    obstacle_radius: 2.0            # 障碍物影响半径 (m)
+    safety_distance: 1.0            # 最小安全距离 (m)
+    
+    # 动态调整参数
+    adaptive_gains: true            # 是否启用自适应增益
+    adaptation_rate: 0.01           # 自适应调整速率
+    
+  # 共识算法参数
+  consensus:
+    consensus_gain: 0.5             # 共识增益
+    damping_factor: 0.8             # 阻尼系数
+    convergence_threshold: 0.1      # 收敛阈值 (m)
+    max_iterations: 100             # 最大迭代次数
+    
+    # 通信拓扑
+    topology_type: "nearest_neighbor"  # 可选: all_to_all, nearest_neighbor, leader_follower
+    communication_range: 5.0        # 通信范围 (m)
+    
+  # 安全约束
+  safety:
+    min_distance: 1.0               # 车辆间最小距离 (m)
+    max_velocity: 2.0               # 最大线速度 (m/s)
+    max_angular_velocity: 1.0       # 最大角速度 (rad/s)
+    max_acceleration: 1.0           # 最大加速度 (m/s²)
+    max_deceleration: 1.5           # 最大减速度 (m/s²)
+    
+    # 紧急制动
+    emergency_brake_distance: 0.5   # 紧急制动距离 (m)
+    emergency_brake_deceleration: 3.0 # 紧急制动减速度 (m/s²)
+
+# 编队配置
+formation_config:
+  default_formation: "line"         # 默认编队类型
+  formation_scale: 1.0              # 编队尺度
+  leader_id: 0                      # 领导者车辆ID
+  
+  # 支持的编队类型
+  formations:
+    line:
+      spacing: 2.0                  # 车辆间距 (m)
+      angle: 0.0                    # 编队角度 (rad)
+      
+    v_shape:
+      spacing: 2.0                  # 车辆间距 (m)
+      angle: 0.785398               # V形角度 (π/4 rad)
+      
+    diamond:
+      size: 2.0                     # 菱形尺寸 (m)
+      
+    circle:
+      radius: 2.0                   # 圆形半径 (m)
+      
+    rectangle:
+      width: 4.0                    # 矩形宽度 (m)
+      height: 2.0                   # 矩形高度 (m)
+
+# 车辆参数
+vehicle_params:
+  # 车辆物理参数
+  wheelbase: 0.5                    # 轴距 (m)
+  max_steering_angle: 0.524         # 最大转向角 (30度)
+  turning_radius: 1.0               # 最小转弯半径 (m)
+  
+  # 传感器参数
+  sensor_range: 10.0                # 传感器检测范围 (m)
+  sensor_angle: 3.14159             # 传感器角度范围 (π rad)
+  sensor_resolution: 0.1            # 传感器分辨率 (m)
+  
+  # 控制参数
+  control_frequency: 10.0           # 控制频率 (Hz)
+  
+  # PID控制器参数
+  pid_controller:
+    linear_velocity:
+      kp: 1.0
+      ki: 0.1
+      kd: 0.05
+      max_integral: 10.0
+      min_output: -2.0
+      max_output: 2.0
+      
+    angular_velocity:
+      kp: 2.0
+      ki: 0.2
+      kd: 0.1
+      max_integral: 5.0
+      min_output: -1.0
+      max_output: 1.0
+
+# 通信参数
+communication:
+  protocol: "UDP"                   # 通信协议
+  port: 8888                        # 通信端口
+  broadcast_frequency: 10           # 广播频率 (Hz)
+  max_packet_size: 1024             # 最大数据包大小 (bytes)
+  timeout: 1000                     # 超时时间 (ms)
+  retry_count: 3                    # 重试次数
+  
+  # 消息队列
+  message_queue_size: 100           # 消息队列大小
+  message_priority: true            # 是否启用消息优先级
+  
+  # 网络配置
+  multicast_group: "224.0.0.1"      # 多播组地址
+  network_interface: "eth0"         # 网络接口
+
+# 避障参数
+obstacle_avoidance:
+  enable: true                      # 是否启用避障
+  algorithm: "dwa"                  # 避障算法: dwa, potential_field, rrt
+  
+  # 动态窗口法 (DWA) 参数
+  dwa:
+    prediction_time: 2.0            # 预测时间 (s)
+    velocity_resolution: 0.1        # 速度采样分辨率
+    angular_resolution: 0.1         # 角速度采样分辨率
+    
+    # 评估函数权重
+    heading_weight: 0.4             # 方向得分权重
+    clearance_weight: 0.3           # 距离得分权重
+    velocity_weight: 0.3            # 速度得分权重
+    
+    # 动态障碍物预测
+    dynamic_obstacle_prediction: true
+    prediction_steps: 10            # 预测步数
+    
+  # 障碍物检测
+  obstacle_detection:
+    min_obstacle_size: 0.2          # 最小障碍物尺寸 (m)
+    max_obstacle_size: 5.0          # 最大障碍物尺寸 (m)
+    obstacle_buffer: 0.3            # 障碍物缓冲区 (m)
+
+# 性能参数
+performance:
+  # 目标性能指标
+  target_formation_error: 0.2       # 目标编队误差 (m)
+  target_convergence_time: 10.0     # 目标收敛时间 (s)
+  target_energy_efficiency: 0.8     # 目标能效 (0-1)
+  
+  # 监控参数
+  monitoring_frequency: 1.0         # 监控频率 (Hz)
+  log_level: "INFO"                 # 日志级别: DEBUG, INFO, WARN, ERROR
+  
+  # 性能优化
+  optimization:
+    enable_parallel_processing: true  # 启用并行处理
+    max_threads: 4                   # 最大线程数
+    memory_limit: 1024               # 内存限制 (MB)
+
+# 仿真参数
+simulation:
+  # 仿真环境
+  world_size: [20.0, 20.0]          # 世界尺寸 [width, height] (m)
+  time_step: 0.1                    # 仿真时间步长 (s)
+  real_time_factor: 1.0             # 实时因子
+  
+  # 噪声模型
+  noise:
+    position_noise: 0.01            # 位置噪声标准差 (m)
+    velocity_noise: 0.01            # 速度噪声标准差 (m/s)
+    heading_noise: 0.01             # 航向噪声标准差 (rad)
+    
+  # 故障模拟
+  fault_simulation:
+    enable: false                   # 是否启用故障模拟
+    communication_failure_rate: 0.01 # 通信故障率
+    sensor_failure_rate: 0.005     # 传感器故障率
+    actuator_failure_rate: 0.002   # 执行器故障率
+
+# 调试参数
+debug:
+  enable_visualization: true        # 启用可视化
+  enable_logging: true              # 启用日志记录
+  log_file: "formation_control.log" # 日志文件名
+  
+  # 可视化选项
+  visualization:
+    show_trajectories: true         # 显示轨迹
+    show_forces: true               # 显示力向量
+    show_communication: true        # 显示通信链路
+    show_obstacles: true            # 显示障碍物
+    
+    # 颜色配置
+    colors:
+      vehicle: [0.0, 0.0, 1.0]      # 车辆颜色 (RGB)
+      trajectory: [0.0, 1.0, 0.0]   # 轨迹颜色
+      formation: [1.0, 0.0, 0.0]    # 编队线颜色
+      obstacle: [0.5, 0.5, 0.5]     # 障碍物颜色 
